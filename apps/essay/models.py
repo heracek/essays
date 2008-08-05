@@ -1,4 +1,5 @@
 from django.db import models
+from utils import split_text_to_words_dict_with_counts
 
 class Essay(models.Model):
     title = models.CharField(max_length=100)
@@ -17,6 +18,16 @@ class Essay(models.Model):
             
             hyperwordinessay.delete()
         
+        for (word, count) in split_text_to_words_dict_with_counts(self.text).iteritems():
+            try:
+                hyperword = HyperWord.objects.get(word=word)
+                hyperword.count += count
+                hyperword.save()
+                
+            except HyperWord.DoesNotExist:
+                hyperword = HyperWord.objects.create(word=word, count=count)
+            
+            HyperWordsInEssays.objects.create(hyperword=hyperword, essay=self, count=count)
         
 
 class HyperWord(models.Model):

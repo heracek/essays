@@ -10,6 +10,8 @@ def split_text_to_words(text):
             if last_aplha_chars:
                 words_list.append(''.join(last_aplha_chars))
                 last_aplha_chars = []
+    if last_aplha_chars:
+        words_list.append(''.join(last_aplha_chars))
     return words_list
 
 def count_words_in_list_to_dict(words_list):

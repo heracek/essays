@@ -3,6 +3,30 @@ from utils import split_text_to_words, count_words_in_list_to_dict, split_text_t
 
 
 class UtilsSplitTextToWordsTestCase(unittest.TestCase):
+    def testEmptyStr(self):
+        text = ''
+        
+        self.assertEqual(
+            split_text_to_words(text),
+            []
+        )
+    
+    def testNoWord(self):
+        text = '  . - + 123'
+        
+        self.assertEqual(
+            split_text_to_words(text),
+            []
+        )
+    
+    def testSingleWord(self):
+        text = 'word'
+        
+        self.assertEqual(
+            split_text_to_words(text),
+            ['word']
+        )
+        
     def testSimpleText(self):
         text = 'Simple text.'
         
