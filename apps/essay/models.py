@@ -33,7 +33,15 @@ class Essay(models.Model):
     def get_hypertexted_text(self):
         hypertexted_text = StringIO()
         last_aplha_chars_len = 0
-
+        
+        def get_hypertexted_word(word):
+            try:
+                hyperword = HyperWord.objects.get(word=word.lower())
+                return '<a href="%s" class="word-%s">%s</a>' % (hyperword.get_absolute_url(), hyperword.word, word)
+            except HyperWord.DoesNotExist:
+                return word
+                
+        
         for (i, char) in enumerate(self.text):
             if char.isalpha():
                 last_aplha_chars_len += 1
@@ -41,15 +49,13 @@ class Essay(models.Model):
                 if last_aplha_chars_len:
                     word = self.text[i-last_aplha_chars_len:i]
                     
-                    try:
-                        hyperword = HyperWord.objects.get(word=word.lower())
-                        hypertexted_text.write('<a href="%s">%s</a>' % (hyperword.get_absolute_url(), word))
-                    except HyperWord.DoesNotExist:
-                        hypertexted_text.write(word)
+                    hypertexted_text.write(get_hypertexted_word(word))
+                    
                     last_aplha_chars_len = 0
                 hypertexted_text.write(char)
         if last_aplha_chars_len:
-            pass
+            word = self.text[-last_aplha_chars_len:]
+            hypertexted_text.write(get_hypertexted_word(word))
         
         hypertexted_text.seek(0)
         return hypertexted_text.read()

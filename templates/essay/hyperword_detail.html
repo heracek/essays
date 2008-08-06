@@ -1,15 +1,24 @@
 {% extends "base.html" %}
 
+{% block title %} | Word - {{ object.word }}{% endblock %}
+
+{% block head %}
+<style type="text/css">
+a.word-{{ object.word }} {
+  background-color: yellow;
+}
+</style>
+{% endblock %}
+
 {% block content %}
-  <h1>Word <span style="color:gray">{{ object.word }}</span> (total cout: {{ object.count }})</h1>
-  <ul>
-    {% for hyperwordinessay in object.hyperwordsinessays_set.all %}
-      <li>
-        <h2>{{ hyperwordinessay.essay.title }} (count: {{ hyperwordinessay.count }})</h2>
-        <div>
-          {{ hyperwordinessay.essay.get_hypertexted_text|safe }}
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
+  <h1>Word <span style="color:gray">{{ object.word }}</span></h1>
+  <p>total "{{ object.word }}" cout: {{ object.count }}</p>
+  {% for hyperwordinessay in object.hyperwordsinessays_set.all %}
+    <h2>{{ hyperwordinessay.essay.title }}<a href="{{ hyperwordinessay.essay.get_absolute_url }}"></a></h2>
+    <p style="color:gray">word "{{ object.word }}" count: {{ hyperwordinessay.count }}</p>
+    <p class="essay">
+      {{ hyperwordinessay.essay.get_hypertexted_text|safe }}
+    </p>
+    <p class="blogline blogfoot"><span class="blogitem"><a href="#">PERMALINK</a></span>|<span class="blogitem"><a href="#">COMMENTS</a></span></p>
+  {% endfor %}
 {% endblock %}
