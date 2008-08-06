@@ -54,10 +54,11 @@ class Essay(models.Model):
         hypertexted_text.seek(0)
         return hypertexted_text.read()
     get_hypertexted_text.allow_tags = True
+    get_hypertexted_text.short_description = 'Hypertexted text'
         
 
 class HyperWord(models.Model):
-    word = models.CharField(max_length=100)
+    word = models.SlugField()
     essays = models.ManyToManyField(Essay, through='HyperWordsInEssays')
     count = models.IntegerField(default=0)
     
@@ -71,3 +72,6 @@ class HyperWordsInEssays(models.Model):
     hyperword = models.ForeignKey(HyperWord)
     essay = models.ForeignKey(Essay)
     count = models.IntegerField(default=0)
+    
+    class Meta:
+        ordering = ['-count']

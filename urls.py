@@ -7,12 +7,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^essays/', include('essays.foo.urls')),
-
-    # Uncomment this for admin docs:
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment this for admin:
     (r'^admin/(.*)', admin.site.root),
+    (r'^', include('essays.apps.essay.urls')),
 )
